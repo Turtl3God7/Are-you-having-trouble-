@@ -1,37 +1,20 @@
-name: Push content to Page
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allow manual triggering of the workflow
 
 jobs:
-  run-html:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
 
-    - name: Install Dependencies
-      run: |
-        npm init -y
-        npm install puppeteer
-
-    - name: Run HTML File
-      run: |
-        echo "const puppeteer = require('puppeteer');
-        (async () => {
-          const browser = await puppeteer.launch();
-          const page = await browser.newPage();
-          await page.goto('file://$GITHUB_WORKSPACE/index.html');
-          console.log('HTML file loaded successfully');
-          await browser.close();
-        })();" > run-html.js
-        node run-html.js
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v1
